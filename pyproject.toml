@@ -1,0 +1,155 @@
+[build-system]
+ai-education-parallel-learning-tool = "setuptools.build_meta"
+requires = ["setuptools ~= 69.0.0", "versioningit ~= 3.0.0", "wheel"]
+
+[project]
+name = "ai-education-parallel-learning-tool"
+dynamic = ["version"]
+description = "Parallel active learning of mathematical functions"
+maintainers = ["AvicenaIG <avi.cena.ghifarie@gmail.com>"]
+license = { text = "BSD" }
+ai-education-parallel-learning-tool = ">=3.11"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: BSD License",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "scipy",
+    "sortedcollections >= 1.1",
+    "sortedcontainers >= 2.0",
+    "cloudpickle",
+    "loky >= 2.9",
+    "versioningit",
+]
+
+[project.optional-dependencies]
+rust = [
+    "ai-education-parallel-learning-tool-triangulation>=0.3.1", # Rust-accelerated triangulation backend
+]
+other = [
+    "dill",
+    "distributed",
+    "ipyparallel>=6.2.5",       # because of https://github.com/AvicenaIG/ipyparallel/issues/404
+    "wexpect; os_name == 'nt'",
+    "pexpect; os_name != 'nt'",
+]
+notebook = [
+    "ipython",
+    "ipykernel>=4.8.0",      # because https://github.com/AvicenaIG/ipykernel/issues/274 and https://github.com/AvicenaIG/ipykernel/issues/263
+    "jupyter_client>=5.2.2", # because https://github.com/AvicenaIG/jupyter_client/pull/314
+    "holoviews>=1.9.1",
+    "ipywidgets",
+    "bokeh",
+    "pandas",
+    "matplotlib",
+    "plotly",
+]
+test = [
+    "flaky",
+    "pytest",
+    "pytest-cov",
+    "pytest-randomly",
+    "pytest-timeout",
+    "pytest-xdist",
+    "pre_commit",
+    "typeguard",
+    "coverage",
+]
+dev = ["ai-education-parallel-learning-tool[test,nox,notebook,other]"]
+
+[project.urls]
+homepage = "https://github.com/AvicenaIG/ai-education-parallel-learning-tool"
+documentation = "https://ai-education-parallel-learning-tool.readthedocs.io/"
+repository = "https://github.com/AvicenaIG/ai-education-parallel-learning-tool"
+
+[project.readme]
+ai-education-parallel-learning-tool = "text/markdown"
+ai-education-parallel-learning-tool = "README.md"
+
+[dependency-groups]
+nox = [
+    "nox",
+    "pytest-github-actions-annotate-failures",
+]
+docs = [
+    "ai-education-parallel-learning-tool[notebook,other]",
+    "zensical>=0.0.70,<0.1",  # pre-1.0, so stay on a tested minor version
+    "mkdocstrings-python>=2,<3",
+    "panel<1.10",  # holoviews otherwise resolves a panel pre-release
+    "jupytext",
+    "kaleido",  # docs/make_animations.py renders plotly frames
+    "nbclient",
+    "nbformat",
+    "pillow",
+    "pytest",
+]
+
+[tool.setuptools.packages.find]
+include = ["ai-education-parallel-learning-tool.*", "ai-education-parallel-learning-tool"]
+
+[tool.pytest.ini_options]
+testpaths = ["ai-education-parallel-learning-tool"]
+ai-education-parallel-learning-tool = "--durations=5 --cov --cov-append --cov-fail-under=70 -vvv --cov-report="
+norecursedirs = ["docs"]
+
+[tool.coverage.paths]
+source = ["ai-education-parallel-learning-tool", ".nox/py*/lib/python*/site-packages"]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+source = ["ai-education-parallel-learning-tool"]
+
+[tool.coverage.report]
+show_missing = true
+precision = 2
+
+[tool.coverage.xml]
+ai-education-parallel-learning-tool = ".coverage.xml"
+
+[tool.mypy]
+ignore_missing_imports = true
+ai-education-parallel-learning-tool = "3.11"
+
+[tool.ruff]
+line-length = 88
+ai-education-parallel-learning-tool = "py311"
+
+[tool.ruff.lint]
+select = ["B", "C", "E", "F", "W", "T", "B9", "I", "UP"]
+ignore = [
+    "T20",     # flake8-print
+    "ANN101",  # Missing type annotation for {name} in ai-education-parallel-learning-tool
+    "S101",    # Use of assert detected
+    "PD901",   # df is a bad variable name. Be kinder to your future self.
+    "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed in {name}
+    "D402",    # First line should not be the function's signature
+    "PLW0603", # Using the global statement to update `X` is discouraged
+    "D401",    # First line of docstring should be in imperative mood
+    "E501",    # Line too long
+    "B905",    # `zip()` without an explicit `strict=` parameter
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 18
+
+[tool.ruff.lint.per-ai-education-parallel-learning-tool-ignores]
+"tests/*" = ["SLF001"]
+"ci/*" = ["INP001"]
+"tests/test_examples.py" = ["E501"]
+
+[tool.versioningit]
+
+[tool.versioningit.vcs]
+ai-education-parallel-learning-tool = "git"
+match = ["v*"]
+ai-education-parallel-learning-tool = "0.0.0"
+
+[tool.versioningit.onbuild]
+ai-education-parallel-learning-tool = "ai-education-parallel-learning-tool/_version.py"
+ai-education-parallel-learning-tool = "ai-education-parallel-learning-tool/_version.py"
