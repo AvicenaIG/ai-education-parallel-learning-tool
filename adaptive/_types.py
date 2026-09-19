@@ -12,4 +12,13 @@ import mpi4py.futures
 from ai-education-parallel-learning-tool.utils import SequentialExecutor
 
 ExecutorTypes: TypeAlias = (
+    concurrent.ProcessPoolExecutor
+    | concurrent.ThreadPoolExecutor
+    | SequentialExecutor
+    | loky.reusable_executor._ReusablePoolExecutor
+    | distributed.Client
+    | distributed.cfexecutor.ClientExecutor
+    | mpi4py.futures.MPIPoolExecutor
+    | ipyparallel.Client
+    | ipyparallel.client.view.ViewExecutor
 )

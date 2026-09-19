@@ -13,25 +13,41 @@ xdist = ("-n", "auto") if num_cpus > 2 else ()
 
 @nox.session(python=python)
 def pytest_min_deps(session: nox.Session) -> None:
-    pass  # TODO: implement
+    """Run pytest with no optional dependencies."""
+    session.install(".[test]")
+    session.run("coverage", "erase")
+    session.run("pytest", *xdist)
 
 
 @nox.session(python=python)
 def pytest_all_deps(session: nox.Session) -> None:
-    pass  # TODO: implement
+    """Run pytest with "other" optional dependencies."""
+    session.install(".[test,other]")
+    session.run("coverage", "erase")
+    session.run("pytest", *xdist)
 
 
 @nox.session(python="3.13")
 def pytest_rust_backend(session: nox.Session) -> None:
-    pass  # TODO: implement
+    """Run the test suite with the Rust triangulation backend required."""
+    session.install(".[test,other,rust]")
+    session.run("coverage", "erase")
+    session.run("pytest", *xdist, env={"ADAPTIVE_TRIANGULATION_BACKEND": "rust"})
 
 
 @nox.session(python="3.13")
 def pytest_typeguard(session: nox.Session) -> None:
-    pass  # TODO: implement
+    """Run pytest with typeguard."""
+    session.install(".[test,other]")
+    session.run("coverage", "erase")
+    session.run("pytest", "--typeguard-packages=ai-education-parallel-learning-tool", *xdist)
 
 
 @nox.session(python="3.13")
 def coverage(session: nox.Session) -> None:
-    pass  # TODO: implement
+    """Generate coverage report."""
+    session.install(".[test,other]")
+    session.run("pytest", *xdist)
 
+    session.run("coverage", "report")
+    session.run("coverage", "xml")
