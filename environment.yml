@@ -1,0 +1,19 @@
+name: ai-education-parallel-learning-tool
+
+channels:
+- conda-forge
+
+dependencies:
+  - python=3.13
+  - sortedcontainers
+  - sortedcollections
+  - scipy
+  - cloudpickle
+  - holoviews
+  - ipyparallel>=6.2.5
+  - distributed
+  - ipykernel>=4.8*
+  - loky
+  - jupyter_client>=5.2.2
+  - ipywidgets
+  - plotly

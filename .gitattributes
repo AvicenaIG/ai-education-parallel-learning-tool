@@ -1,0 +1,2 @@
+*.ipynb filter=ipynb_filter
+ai-education-parallel-learning-tool/_static_version.py export-subst
