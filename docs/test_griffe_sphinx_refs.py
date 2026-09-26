@@ -14,36 +14,61 @@ PUBLIC = frozenset({"BalancingLearner", "Runner"})
 
 
 def link(identifier, text):
-    pass  # TODO: implement
+    return f'<autoref identifier="{identifier}" optional><code>{text}</code></autoref>'
 
 
 def test_tilde_ref_shows_last_component():
-    pass  # TODO: implement
+    text = "A `~ai-education-parallel-learning-tool.BaseLearner` instance."
+    assert (
+        sphinx_refs_to_autorefs(text, PUBLIC)
+        == f"A {link('ai-education-parallel-learning-tool.BaseLearner', 'BaseLearner')} instance."
+    )
 
 
 def test_dotted_ref_keeps_full_path():
-    pass  # TODO: implement
+    text = "Returns a `pandas.DataFrame`."
+    assert (
+        sphinx_refs_to_autorefs(text, PUBLIC)
+        == f"Returns a {link('pandas.DataFrame', 'pandas.DataFrame')}."
+    )
 
 
 def test_misplaced_tilde_is_handled():
-    pass  # TODO: implement
+    text = "learner : ~`ai-education-parallel-learning-tool.BaseLearner` instance"
+    assert (
+        sphinx_refs_to_autorefs(text, PUBLIC)
+        == f"learner : {link('ai-education-parallel-learning-tool.BaseLearner', 'BaseLearner')} instance"
+    )
 
 
 def test_public_name_links_to_ai-education-parallel-learning-tool():
-    pass  # TODO: implement
+    text = "See `BalancingLearner`."
+    assert (
+        sphinx_refs_to_autorefs(text, PUBLIC)
+        == f"See {link('ai-education-parallel-learning-tool.BalancingLearner', 'BalancingLearner')}."
+    )
 
 
 def test_literals_and_plain_names_untouched():
-    pass  # TODO: implement
+    text = "Use ``learner.plot()`` with `retries` and ``Runner``."
+    assert sphinx_refs_to_autorefs(text, PUBLIC) == text
 
 
 def test_numpy_field_headers_are_stripped_not_linked():
-    pass  # TODO: implement
+    text = "Run it.\n\nParameters\n----------\nlearner : `~ai-education-parallel-learning-tool.BaseLearner` instance\n    Uses `~ai-education-parallel-learning-tool.Runner`.\n\nReturns\n-------\n`pandas.DataFrame`\n"
+    result = sphinx_refs_to_autorefs(text, PUBLIC)
+    assert "learner : ai-education-parallel-learning-tool.BaseLearner instance\n" in result
+    assert "\npandas.DataFrame\n" in result
+    assert f"    Uses {link('ai-education-parallel-learning-tool.Runner', 'Runner')}." in result
 
 
 def test_backslash_continuation_in_field_header_is_joined():
-    pass  # TODO: implement
+    text = "Parameters\n----------\nexecutor : `a.B`,\\\n           `c.D`, optional\n    Description.\n"
+    result = sphinx_refs_to_autorefs(text, PUBLIC)
+    assert "executor : a.B, c.D, optional\n    Description." in result
 
 
 def test_rst_literal_in_field_header_is_stripped():
-    pass  # TODO: implement
+    text = "Attributes\n----------\nioloop : ``asyncio.AbstractEventLoop``\n    The ``loop``.\n"
+    result = sphinx_refs_to_autorefs(text, PUBLIC)
+    assert "ioloop : asyncio.AbstractEventLoop\n    The ``loop``." in result
