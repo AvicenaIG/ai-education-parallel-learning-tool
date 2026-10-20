@@ -26,7 +26,6 @@ try:
 except ModuleNotFoundError:
     with_pandas = False
 
-
 def _downdate(c: np.ndarray, nans: list[int], depth: int) -> np.ndarray:
     # This is algorithm 5 from the thesis of Pedro Gonnet.
     b = coeff.b_def[depth].copy()
@@ -46,7 +45,6 @@ def _downdate(c: np.ndarray, nans: list[int], depth: int) -> np.ndarray:
         m -= 1
     return c
 
-
 def _zero_nans(fx: np.ndarray) -> list[int]:
     """Caution: this function modifies fx."""
     nans = []
@@ -55,7 +53,6 @@ def _zero_nans(fx: np.ndarray) -> list[int]:
             nans.append(i)
             fx[i] = 0.0
     return nans
-
 
 def _calc_coeffs(fx: np.ndarray, depth: int) -> np.ndarray:
     """Caution: this function modifies fx."""
@@ -66,10 +63,8 @@ def _calc_coeffs(fx: np.ndarray, depth: int) -> np.ndarray:
         c_new = _downdate(c_new, nans, depth)
     return c_new
 
-
 class DivergentIntegralError(ValueError):
     pass
-
 
 class _Interval:
     """
@@ -338,7 +333,6 @@ class _Interval:
             "igral={:.5E}".format(self.igral if hasattr(self, "igral") else np.inf),
         ]
         return " ".join(lst)
-
 
 class IntegratorLearner(BaseLearner):
     def __init__(self, function: Callable, bounds: tuple[int, int], tol: float) -> None:
